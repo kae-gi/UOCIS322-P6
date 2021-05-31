@@ -1,89 +1,75 @@
 # UOCIS322 - Project 6 #
+Author: Kaetlyn Gibson
+
+Contact Address: kaetlyng@uoregon.edu
+
+## Overview
 Brevet time calculator with AJAX, MongoDB, and a RESTful API!
 
-## What is in this repository
+### Background
+What are brevets? Brevets are timed rides with controls. Controls are points where a rider must obtain proof of passage, and controle times are the minimum and maximum times by which the rider must arrive at the location.
 
-You have a minimal example of `docker-compose` in `DockerRestAPI`, using which you can create RESTful API-based services (as demonstrated in class). 
+### The Algorithm
+To calculate the opening time, we divide the distance of the control point(in km) by the maximum speed(in km/hr) designated by the location of the control. To calculate the closing time, we divide the distance of the control point(in km) by the minimum speed(in km/hr) designated by the location of the control. Of course, it is slightly more complicated than this, so I recommend taking a look at the examples from here: https://rusa.org/pages/acp-brevet-control-times-calculator.
 
-## IMPORTANT NOTES
+### Time Calculation
+Dividing the distance in kilometers by speed of kilometers per hour results in a time
+in hours. To convert into hours and minutes, subtract the whole number of hours and multiply the resulting fractional part by 60. Times are rounded to the nearest minute.
 
-**MAKE SURE TO USE THE SOLUTION `acp_times.py` from Canvas for this project!**
+### Tasks
 
-**MAKE SURE TO KEEP YOUR FILES in `brevets`! REMOVE `DockerRestAPI` after you're done!**
+- Created three basic APIs:
+  - "http://<host:port>/listAll" should return all open and close times in the database
+  - "http://<host:port>/listOpenOnly" should return open times only
+  - "http://<host:port>/listCloseOnly" should return close times only
+- Two different representations: one in csv, one in JSON. JSON is the default representation for all three.
+  - "http://<host:port>/listAll/csv" should return all open and close times in CSV format
+  - "http://<host:port>/listOpenOnly/csv" should return open times only in CSV format
+  - "http://<host:port>/listCloseOnly/csv" should return close times only in CSV format
 
-## Getting started 
+  - "http://<host:port>/listAll/json" should return all open and close times in JSON format
+  - "http://<host:port>/listOpenOnly/json" should return open times only in JSON format
+  - "http://<host:port>/listCloseOnly/json" should return close times only in JSON format
+- Added a query parameter to get top "k" open and close times (examples below)
+  - "http://<host:port>/listOpenOnly/csv?top=3" should return top 3 open times only (in ascending order) in CSV format
+  - "http://<host:port>/listOpenOnly/json?top=5" should return top 5 open times only (in ascending order) in JSON format
+  - "http://<host:port>/listCloseOnly/csv?top=6" should return top 5 close times only (in ascending order) in CSV format
+  - "http://<host:port>/listCloseOnly/json?top=4" should return top 4 close times only (in ascending order) in JSON format
+- Designed consumer programs to use the service exposed using PHP
 
-You will reuse *your* code from Project 5.
+## Usage
+- Build/run using docker-compose: 
+  ```
+  docker-compose up -d --build
 
-Recall that you created the following functionalities:
-
-1. Add two buttons `Submit` and `Display` in the ACP calculator page.
-
-2. Upon clicking the `Submit` button, the control times should be inserted into a MongoDB database.
-
-3. Upon clicking the `Display` button, the entries from the database should be displayed in a new page.
-
-4. Handle error cases appropriately. For example, `Submit` should return an error if no control times are input. One can imagine many such cases: you'll come up with as many cases as possible.
-
-### Functionality you will add
-
-This project has following four parts. Change the values for host and port according to your machine, and use the web browser to check the results.
-
-* You will design RESTful service to expose what is stored in MongoDB. Specifically, you'll use the boilerplate given in DockerRestAPI folder, and create the following three basic APIs:
-    * "http://<host:port>/listAll" should return all open and close times in the database
-    * "http://<host:port>/listOpenOnly" should return open times only
-    * "http://<host:port>/listCloseOnly" should return close times only
-
-* You will also design two different representations: one in csv and one in json. For the above, JSON should be your default representation for the above three basic APIs. 
-    * "http://<host:port>/listAll/csv" should return all open and close times in CSV format
-    * "http://<host:port>/listOpenOnly/csv" should return open times only in CSV format
-    * "http://<host:port>/listCloseOnly/csv" should return close times only in CSV format
-
-    * "http://<host:port>/listAll/json" should return all open and close times in JSON format
-    * "http://<host:port>/listOpenOnly/json" should return open times only in JSON format
-    * "http://<host:port>/listCloseOnly/json" should return close times only in JSON format
-
-* You will also add a query parameter to get top "k" open and close times. For examples, see below.
-
-    * "http://<host:port>/listOpenOnly/csv?top=3" should return top 3 open times only (in ascending order) in CSV format 
-    * "http://<host:port>/listOpenOnly/json?top=5" should return top 5 open times only (in ascending order) in JSON format
-    * "http://<host:port>/listCloseOnly/csv?top=6" should return top 5 close times only (in ascending order) in CSV format
-    * "http://<host:port>/listCloseOnly/json?top=4" should return top 4 close times only (in ascending order) in JSON format
-
-* You'll also design consumer programs (e.g., in jQuery) to use the service that you expose. `website` inside `DockerRestAPI` is an example of that. It is uses PHP. You're welcome to use either PHP or jQuery to consume your services. NOTE: your consumer program should be in a different container like example in `DockerRestAPI`.
-
-
-## Tasks
-
-As always you'll turn in your `credentials.ini` using Canvas, which will point to your repository on GitHub, which should contain:
-
-* The working application with all 4 parts.
-
-* `docker-compose.yml`.
-
-* An updated `README`.
-
-## Grading Rubric
-
-* If your code works as expected: 100 points. This includes:
-    * Basic APIs work as expected.
-    * Representations work as expected.
-    * Query parameter-based APIs work as expected.
-    * Consumer program works as expected. 
-
-* For each non-working API, 5 points will be docked off. If none of them work,
-  you'll get 35 points assuming
-    * `README` is updated with your name, email, and details.
-    * `docker-compose.yml` works/builds without any errors.
-    * `Dockerfile` is present. 
-    * `credentials.ini` is submitted with the correct URL of your repo.
-
-* If the `README` is not clear or missing, 5 points will be docked off. 
-
-* If `Dockerfile` or `docker-compose` is missing, doesn't build or doesn't run, **15** points will be docked off.
-	
-* If `credentials.ini` is not submitted or the repo is not found, 0 will be assigned.
+  ```
+- To use the brevet calculator:
+  - Launch `http://5555:5000` using web browser
+  - Choose a brevet distance
+  - Choose begin date and time
+  - Enter controle locations in km or miles
+  - Submit, to submit values (message will appear if successful)
+  - Display, to display values on another page
+- To view the APIs via website:
+  - Launch `http://5557:5000` using web browser
+  - Select desired from the following:
+    - From APIs:
+      - listAll
+      - listOpenOnly
+      - listCloseOnly
+    - From result representation:
+      - Table (extra)
+      - CSV
+      - JSON (default)
+    - View top k results, or not
+  - Submit choices using `Get Times`
 
 ## Credits
 
 Michal Young, Ram Durairajan, Steven Walton, Joe Istas.
+
+The algorithm, described by RUSA: https://rusa.org/pages/acp-brevet-control-times-calculator
+
+The original calculator: https://rusa.org/octime_acp.html
+
+Additional background: https://rusa.org/pages/rulesForRiders
