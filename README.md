@@ -41,7 +41,6 @@ in hours. To convert into hours and minutes, subtract the whole number of hours 
 - Build/run using docker-compose: 
   ```
   docker-compose up -d --build
-
   ```
 - To use the brevet calculator:
   - Launch `http://5555:5000` using web browser
