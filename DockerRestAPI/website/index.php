@@ -11,8 +11,8 @@
         <p>Click to view details!</p>
         <ul>
             <?php
-            $json = file_get_contents(
-              'http://'.$_ENV['BACKEND_ADDR'].':'.$_ENV['BACKEND_PORT'].'/TVShows');
+            $json = file_get_contents('http://'.$_ENV['BACKEND_ADDR'].':'.$_ENV['BACKEND_PORT'].'/TVShows');
+
             $obj = json_decode($json);
             foreach ($obj as $id => $tvshow) {
                 ?>
